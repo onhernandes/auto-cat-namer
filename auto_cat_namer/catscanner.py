@@ -25,7 +25,6 @@ def write_name_to_image(name, image_path, output_path):
         raise ValueError("Could not detect cat's face location")
 
     x, y, w, h = rects[0]
-    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
     cv2.putText(
         image, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 255), 2,
     )
