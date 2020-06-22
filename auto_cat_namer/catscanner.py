@@ -1,22 +1,32 @@
 import cv2
-HAARS_FILE = "./haarcascade_frontalcatface_extended.xml"
-IMG_PATH = "./images/cat_04.jpg"
+from pathlib import Path
+import os
 
-image = cv2.imread(IMG_PATH)
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+HAARS_FILENAME = "./haarcascade_frontalcatface_extended.xml"
+HAARS_FILE = os.path.join(ROOT_DIR, HAARS_FILENAME)
 
-# load the cat detector Haar cascade, then detect cat faces
-# in the input image
-detector = cv2.CascadeClassifier(HAARS_FILE)
-rects = detector.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=7, minSize=(75, 75))
-# rects = detector.detectMultiScale(gray, 1.3, 5)
 
-# loop over the cat faces and draw a rectangle surrounding each
-for (i, (x, y, w, h)) in enumerate(rects):
-  print(x, y, w, h)
-  cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-  cv2.putText(image, "Cat #{}".format(i + 1), (x, y - 10),
-    cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 255), 2)
-# show the detected cat faces
-cv2.imshow("Cat Faces", image)
-cv2.waitKey(0)
+def write_name_to_image(name, image_path, output_path):
+    image_path = Path(image_path).resolve()
+    suffix = image_path.suffix
+    image_path = str(image_path)
+    output_path = Path(output_path).resolve()
+    full_output_path = str(Path("%s/%s%s" % (output_path, name, suffix)))
+
+    image = cv2.imread(image_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    detector = cv2.CascadeClassifier(HAARS_FILE)
+    rects = detector.detectMultiScale(
+        gray, scaleFactor=1.3, minNeighbors=7, minSize=(75, 75)
+    )
+
+    if len(rects) == 0:
+        raise ValueError("Could not detect cat's face location")
+
+    x, y, w, h = rects[0]
+    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv2.putText(
+        image, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 255), 2,
+    )
+    cv2.imwrite(full_output_path, image)
