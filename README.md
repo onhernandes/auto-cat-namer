@@ -6,7 +6,7 @@ I was curious about how to detect animal's faces on images so I wrote this. If I
 
 ### Example and how to install/use it
 
-![](./Rufus.jpg)
+![](./rufus.jpg)
 
 Install with:
 
