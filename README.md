@@ -4,6 +4,10 @@ Automagically write names right after detecting cat's faces using OpenCV Haar Ca
 
 I was curious about how to detect animal's faces on images so I wrote this. If I keep studying I may use some sort of algorithm with Keras/TensorFlow later.
 
+### Example and how to install/use it
+
+![](./Rufus.jpg)
+
 Install with:
 
 ```bash
